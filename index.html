@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Connected | Social App</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="auth-layer" class="login-container">
+      <div id="login-card" class="login-card">
+        <div class="auth-header">
+          <h1>Connected</h1>
+          <p>Welcome back you've been missed!</p>
+        </div>
+        <form id="login-form">
+          <div class="input-group">
+            <input type="email" id="login-email" placeholder="Email" required />
+          </div>
+          <div class="input-group">
+            <input
+              type="password"
+              id="login-pass"
+              placeholder="Password"
+              required
+            />
+          </div>
+          <button type="submit" class="btn-auth">Log In</button>
+        </form>
+        <div class="auth-footer">
+          <p>
+            Don't have an account?
+            <span onclick="toggleAuth('signup')">Sign Up</span>
+          </p>
+        </div>
+      </div>
+
+      <div id="signup-card" class="login-card hidden">
+        <div class="auth-header">
+          <h1>Create Account</h1>
+          <p>Connect with friends today!</p>
+        </div>
+        <form id="signup-form">
+          <div class="input-group">
+            <input type="text" id="reg-name" placeholder="Full Name" required />
+          </div>
+          <div class="input-group">
+            <input type="email" id="reg-email" placeholder="Email" required />
+          </div>
+          <div class="input-group">
+            <input
+              type="text"
+              id="reg-username"
+              placeholder="Username"
+              required
+            />
+          </div>
+          <div class="input-group">
+            <input
+              type="password"
+              id="reg-pass"
+              placeholder="Password"
+              required
+            />
+          </div>
+          <div class="input-group">
+            <input
+              type="password"
+              id="reg-confirm-pass"
+              placeholder="Confirm Password"
+              required
+            />
+          </div>
+          <button type="submit" class="btn-auth">Sign Up</button>
+        </form>
+        <div class="auth-footer">
+          <p>
+            Already have an account?
+            <span onclick="toggleAuth('login')">Log In</span>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="image-modal"
+      class="modal hidden"
+      onclick="closeModal('image-modal')"
+    >
+      <span class="close-modal">&times;</span>
+      <img id="modal-img" src="" onclick="event.stopPropagation()" />
+    </div>
+
+    <div id="story-modal" class="modal hidden">
+      <div class="story-content">
+        <div class="story-header">
+          <img id="story-user-img" src="" />
+          <span id="story-user-name">User</span>
+          <span class="close-story" onclick="closeModal('story-modal')"
+            >&times;</span
+          >
+        </div>
+        <div class="story-body" id="story-body"></div>
+        <div class="story-bar"><div class="fill"></div></div>
+      </div>
+    </div>
+
+    <div id="app-container" class="hidden">
+      <aside class="sidebar-left">
+        <h1 class="logo">Connected</h1>
+        <nav class="nav-links">
+          <div class="nav-btn active" onclick="switchTab('home')">
+            <i class="fas fa-home"></i> Home
+          </div>
+          <div class="nav-btn" onclick="switchTab('explore')">
+            <i class="fas fa-hashtag"></i> Explore
+          </div>
+          <div class="nav-btn" onclick="switchTab('notifications')">
+            <i class="fas fa-bell"></i> Notifications
+            <span class="badge" id="nav-notif-badge">0</span>
+          </div>
+          <div class="nav-btn" onclick="openMyProfile()">
+            <i class="fas fa-user"></i> Profile
+          </div>
+          <div class="nav-btn" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i> Logout
+          </div>
+        </nav>
+        <button class="btn-create" onclick="switchTab('create')">
+          Create Post
+        </button>
+      </aside>
+
+      <main class="main-content">
+        <header class="mobile-header">
+          <h3>Connected</h3>
+          <i class="fas fa-bell" onclick="switchTab('notifications')"></i>
+        </header>
+
+        <div id="view-home" class="view active">
+          <div class="stories-row" id="stories-container"></div>
+          <div class="create-mini" onclick="switchTab('create')">
+            <img id="mini-avatar" src="" />
+            <input type="text" placeholder="What's on your mind?" disabled />
+          </div>
+          <div id="feed-container"></div>
+        </div>
+
+        <div id="view-explore" class="view">
+          <div class="explore-header">
+            <i class="fas fa-search"></i>
+            <input
+              type="text"
+              id="explore-search"
+              placeholder="Search people, posts..."
+            />
+          </div>
+          <div class="explore-grid" id="explore-grid"></div>
+        </div>
+
+        <div id="view-notifications" class="view">
+          <h3>Notifications</h3>
+          <div id="notif-list"></div>
+        </div>
+
+        <div id="view-create" class="view">
+          <div class="create-post-card">
+            <div class="create-header-row">
+              <h3>Create New</h3>
+              <select id="post-type-select">
+                <option value="post">Feed Post</option>
+                <option value="story">Status / Story</option>
+              </select>
+            </div>
+            <div class="create-body">
+              <textarea
+                id="post-text"
+                placeholder="What's happening?"
+              ></textarea>
+              <div
+                class="image-preview-area"
+                id="img-preview-area"
+                style="display: none"
+              >
+                <img id="img-preview" src="" />
+              </div>
+              <input
+                type="text"
+                id="post-img-url"
+                placeholder="Paste Image URL here..."
+                oninput="previewImage()"
+              />
+            </div>
+            <div class="create-footer">
+              <button class="btn-secondary" onclick="switchTab('home')">
+                Cancel
+              </button>
+              <button class="btn-primary" onclick="publishContent()">
+                Publish
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div id="view-profile" class="view">
+          <div class="profile-header-card">
+            <div class="cover-photo"></div>
+            <div class="profile-details">
+              <img id="profile-img" src="" />
+              <div class="profile-text">
+                <h2 id="profile-name">User</h2>
+                <span id="profile-handle">@username</span>
+              </div>
+              <button id="profile-action-btn" class="btn-follow">Follow</button>
+            </div>
+            <div class="profile-stats">
+              <div class="stat-box">
+                <span class="stat-num" id="stat-posts">0</span>
+                <span class="stat-label">Posts</span>
+              </div>
+              <div class="stat-box">
+                <span class="stat-num" id="stat-followers">0</span>
+                <span class="stat-label">Followers</span>
+              </div>
+              <div class="stat-box">
+                <span class="stat-num" id="stat-following">0</span>
+                <span class="stat-label">Following</span>
+              </div>
+            </div>
+          </div>
+          <h3>Posts</h3>
+          <div id="profile-posts-grid" class="profile-grid"></div>
+        </div>
+      </main>
+
+      <aside class="sidebar-right">
+        <div class="card suggestions">
+          <h3>Who to follow</h3>
+          <div id="suggestions-list"></div>
+        </div>
+      </aside>
+
+      <nav class="bottom-nav">
+        <div onclick="switchTab('home')"><i class="fas fa-home"></i></div>
+        <div onclick="switchTab('explore')"><i class="fas fa-search"></i></div>
+        <div class="add-btn" onclick="switchTab('create')">
+          <i class="fas fa-plus"></i>
+        </div>
+        <div onclick="switchTab('notifications')">
+          <i class="fas fa-bell"></i>
+        </div>
+        <div onclick="openMyProfile()"><i class="fas fa-user"></i></div>
+      </nav>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
