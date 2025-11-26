@@ -3,13 +3,8 @@
 A fully functional, responsive social media interface built entirely with **Vanilla JavaScript, HTML, and CSS**. This project was developed as part of the **Coding Night Challenge**, focusing on DOM manipulation, local storage persistence, and modern UI design without any backend dependencies.
 
 
-
-[Image of Connected App Demo or Screenshot]
-
-> *Replace this text with a screenshot of your app or a link to the live demo.*
-
 ## 🔗 Live Demo
-**[Click here to view the live project](YOUR_VERCEL_OR_GITHUB_PAGES_LINK_HERE)**
+**[Click here to view the live project](https://webwithsufi.github.io/Connected)**
 
 ## ✨ Key Features
 
